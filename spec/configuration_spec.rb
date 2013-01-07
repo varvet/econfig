@@ -65,6 +65,11 @@ describe Econfig::Configuration do
       config.foobar.should == "elephant"
     end
 
+    it "calls get! for bang methods" do
+      config.should_receive(:get!).with("foobar").and_return("elephant")
+      config.foobar!.should == "elephant"
+    end
+
     it "calls set for assignment methods" do
       config.should_receive(:set).with("foobar", "elephant")
       config.foobar = "elephant"

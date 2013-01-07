@@ -21,6 +21,8 @@ module Econfig
     def method_missing(name, *args)
       if name.to_s.end_with?("=")
         set(name.to_s.sub(/=$/, ""), args.first)
+      elsif name.to_s.end_with?("!")
+        get!(name.to_s.sub(/!$/, ""))
       else
         get(name.to_s)
       end
