@@ -6,7 +6,7 @@ module Econfig
     initializer "econfig.setup" do
       Econfig.root = Rails.root
       Econfig.env = Rails.env
-      Rails.application.config.define_method(:app) { Econfig.instance }
+      Rails.application.config.app = Econfig.instance
     end
   end
 end
