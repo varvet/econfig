@@ -103,13 +103,7 @@ You may not use both Redis and relational database storage at the same time.
 This needs to be explicitly enabled. In `config/application.rb` add this line:
 
 ``` ruby
-Econfig.use_redis
-```
-
-You can configure this further:
-
-``` ruby
-Econfig.use_redis :host => "myredis.com"
+Econfig.use_redis Redis.new(:host => "myredis.com")
 ```
 
 You can now set options by assigning them:

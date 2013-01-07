@@ -15,6 +15,11 @@ module Econfig
       require "econfig/active_record"
       Econfig.instance.backends << Econfig::ActiveRecord.new
     end
+
+    def use_redis(redis)
+      require "econfig/redis"
+      Econfig.instance.backends << Econfig::Redis.new(redis)
+    end
   end
 end
 
