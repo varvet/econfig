@@ -1,0 +1,8 @@
+Description:
+    Generate a migration for config options in ActiveRecord
+
+Example:
+    rails generate econfig:migration
+
+    This will create:
+        db/migrate/20130107205126_create_econfig.rb

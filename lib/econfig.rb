@@ -10,6 +10,11 @@ module Econfig
 
   class << self
     attr_accessor :root, :env, :instance
+
+    def use_database
+      require "econfig/active_record"
+      Econfig.instance.backends << Econfig::ActiveRecord.new
+    end
   end
 end
 
