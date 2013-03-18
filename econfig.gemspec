@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["jonas.nicklas@gmail.com", "dev@elabs.se"]
   gem.description   = %q{Flexible configuration for Ruby/Rails applications with a variety of backends}
   gem.summary       = %q{Congifure Ruby apps}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/elabs/econfig"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
