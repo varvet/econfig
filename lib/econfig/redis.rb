@@ -5,11 +5,11 @@ module Econfig
     end
 
     def get(key)
-      @redis.get("econfig_#{key}")
+      @redis.get("#{key}")
     end
 
     def set(key, value)
-      @redis.set("econfig_#{key}", value)
+      @redis.set("#{key}", value)
     end
   end
 end
