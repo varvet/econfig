@@ -8,6 +8,14 @@ module Econfig
       options[key] if options
     end
 
+    # Make sure your application calls this method
+    # during boot to ensure options are assigned in a
+    # thread-safe maner. If you're using Rails requireing
+    # econfig/rails in your Gemfile is sufficent.
+    def eager_load!
+      @options = ::YAML.load_file(path)[Econfig.env]
+    end
+
   private
 
     def path
