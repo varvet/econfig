@@ -1,17 +1,18 @@
 module Econfig
   class Memory
+    def initialize
+      @mutex = Mutex.new
+      @options = {}
+    end
+
     def get(key)
-      options[key]
+      @options[key]
     end
 
     def set(key, value)
-      options[key] = value
-    end
-
-  private
-
-    def options
-      @options ||= {}
+      @mutex.synchronize do
+        @options[key] = value
+      end
     end
   end
 end

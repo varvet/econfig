@@ -5,15 +5,16 @@ module Econfig
     end
 
     def get(key)
-      options[key] if options
+      options[key]
     end
 
-    # Make sure your application calls this method
-    # during boot to ensure options are assigned in a
-    # thread-safe maner. If you're using Rails requireing
-    # econfig/rails in your Gemfile is sufficent.
-    def eager_load!
-      @options = ::YAML.load_file(path)[Econfig.env]
+    def init
+      require "yaml"
+      if File.exist?(path)
+        @options = ::YAML.load_file(path)[Econfig.env]
+      else
+        @options = {}
+      end
     end
 
   private
@@ -23,7 +24,7 @@ module Econfig
     end
 
     def options
-      @options ||= ::YAML.load_file(path)[Econfig.env] if File.exist?(path)
+      @options or raise Econfig::UninitializedError
     end
   end
 end

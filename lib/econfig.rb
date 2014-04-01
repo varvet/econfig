@@ -7,6 +7,7 @@ require "econfig/shortcut"
 
 module Econfig
   class NotFound < StandardError; end
+  class UninitializedError < StandardError; end
 
   class << self
     attr_accessor :root, :env, :instance
@@ -19,6 +20,12 @@ module Econfig
     def use_redis(redis)
       require "econfig/redis"
       Econfig.instance.backends << Econfig::Redis.new(redis)
+    end
+
+    def init
+      Econfig.instance.backends.each do |backend|
+        backend.init if backend.respond_to?(:init)
+      end
     end
   end
 end

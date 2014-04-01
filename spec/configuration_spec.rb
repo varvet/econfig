@@ -1,6 +1,6 @@
 describe Econfig::Configuration do
-  let(:backend) { stub }
-  let(:other_backend) { stub }
+  let(:backend) { double }
+  let(:other_backend) { double }
   let(:config) { Econfig::Configuration.new }
 
   before { config.backends.push(backend, other_backend) }

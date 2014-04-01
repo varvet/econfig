@@ -1,7 +1,7 @@
 module Econfig
   class ActiveRecord
     class Option < ::ActiveRecord::Base
-      attr_accessible :key, :value
+      attr_accessible :key, :value rescue nil
       self.table_name = "econfig_options"
       validates_uniqueness_of :key
       validates_presence_of :key
@@ -14,12 +14,6 @@ module Econfig
     def set(key, value)
       option = Option.where(:key => key).first_or_initialize
       option.update_attributes!(:value => value)
-    end
-
-  private
-
-    def options
-      @options ||= {}
     end
   end
 end

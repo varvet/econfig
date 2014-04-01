@@ -1,5 +1,5 @@
 describe Econfig::YAML do
-  let(:backend) { Econfig::YAML.new }
+  let(:backend) { Econfig::YAML.new.tap(&:init) }
   describe "#get" do
     it "fetches option from yaml config file" do
       backend.get("quox").should == "baz"
@@ -10,7 +10,7 @@ describe Econfig::YAML do
     end
 
     it "returns nil when there is no config file" do
-      backend = Econfig::YAML.new("/does/not/exist")
+      backend = Econfig::YAML.new("/does/not/exist").tap(&:init)
       backend.get("does_not_exist").should be_nil
     end
   end
