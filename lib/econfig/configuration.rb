@@ -5,12 +5,12 @@ module Econfig
     end
 
     def get(key)
-      backend = backends.find { |backend| backend.get(key) }
-      backend.get(key) if backend
+      get!(key) or raise Econfig::NotFound, "configuration key '#{key}' is not set"
     end
 
     def get!(key)
-      get(key) or raise Econfig::NotFound, "configuration key '#{key}' is not set"
+      backend = backends.find { |backend| backend.get(key) }
+      backend.get(key) if backend
     end
 
     def set(key, value)
