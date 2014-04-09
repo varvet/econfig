@@ -58,6 +58,7 @@ You can specify configuration through:
 2. Redis
 3. Relational database
 4. YAML files
+5. OSX Keychain
 
 This allows you to set up econfig on most kinds of hosting solutions
 (EngineYard, Heroku, etc) without any additional effort, and to switch between
@@ -126,6 +127,10 @@ production:
   aws_access_key_id: "xyz"
   aws_secret_access_key: "xyz"
 ```
+
+### OSX Keychain
+
+For the OSX keychain backend, see [econfig-keychain](https://github.com/elabs/econfig-keychain).
 
 ## License
 
