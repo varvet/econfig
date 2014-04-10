@@ -75,6 +75,10 @@ describe Econfig::Configuration do
       config.foobar = "elephant"
     end
 
+    it "claims to respond to everything" do
+      config.should respond_to(:foobar)
+    end
+
     it "raises an error when giving arguments to a getter" do
       expect { config.foobar "Hey" }.to raise_error(ArgumentError, "too many arguments (1 for 0)")
     end

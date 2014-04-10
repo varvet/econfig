@@ -32,7 +32,7 @@ module Econfig
       end
     end
 
-    def respond_to?(*)
+    def respond_to_missing?(*)
       true
     end
   end
