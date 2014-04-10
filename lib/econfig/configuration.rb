@@ -19,12 +19,16 @@ module Econfig
     end
 
     def method_missing(name, *args)
-      if name.to_s.end_with?("=")
-        set(name.to_s.sub(/=$/, ""), args.first)
-      elsif name.to_s.end_with?("!")
-        get!(name.to_s.sub(/!$/, ""))
+      name = name.to_s
+
+      if name.end_with?("=")
+        set(name.sub(/=$/, ""), args.first)
+      elsif args.length > 0
+        raise ArgumentError, "too many arguments (#{args.length} for 0)"
+      elsif name.end_with?("!")
+        get!(name.sub(/!$/, ""))
       else
-        get(name.to_s)
+        get(name)
       end
     end
 
