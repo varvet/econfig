@@ -1,2 +1,3 @@
 test:
   quox: baz
+  envir: '<%= ENV['ECONFIG_EXAMPLE'] %>'

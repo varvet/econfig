@@ -10,8 +10,9 @@ module Econfig
 
     def init
       require "yaml"
+      require "erb"
       if File.exist?(path)
-        @options = ::YAML.load_file(path)[Econfig.env]
+        @options = ::YAML.load(::ERB.new(File.read(path)).result)[Econfig.env]
       else
         @options = {}
       end

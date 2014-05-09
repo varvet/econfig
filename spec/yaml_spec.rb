@@ -13,5 +13,19 @@ describe Econfig::YAML do
       backend = Econfig::YAML.new("/does/not/exist").tap(&:init)
       backend.get("does_not_exist").should be_nil
     end
+
+    it "evaluates the YAML config as ERB" do
+      with_env do
+        ENV['ECONFIG_EXAMPLE'] = "onment"
+        backend.get("envir").should == "onment"
+      end
+    end
+
+    def with_env(&block)
+      original = ENV.to_hash
+      yield if block_given?
+    ensure
+      ENV.replace(original)
+    end
   end
 end
