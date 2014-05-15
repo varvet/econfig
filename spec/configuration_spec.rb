@@ -17,10 +17,10 @@ describe Econfig::Configuration do
       config.get("foobar").should == "elephant"
     end
 
-    it "returns nil if the key can't be found in any backend" do
+    it "raises error if the key can't be found in any backend" do
       backend.stub(:get).with("foobar").and_return(nil)
       other_backend.stub(:get).with("foobar").and_return(nil)
-      config.get("foobar").should == nil
+      expect { config.get("foobar") }.to raise_error(Econfig::NotFound)
     end
   end
 
@@ -36,10 +36,10 @@ describe Econfig::Configuration do
       config.get!("foobar").should == "elephant"
     end
 
-    it "raises error if the key can't be found in any backend" do
+    it "returns nil if the key can't be found in any backend" do
       backend.stub(:get).with("foobar").and_return(nil)
       other_backend.stub(:get).with("foobar").and_return(nil)
-      expect { config.get!("foobar") }.to raise_error(Econfig::NotFound)
+      config.get!("foobar").should == nil
     end
   end
 
