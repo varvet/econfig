@@ -5,12 +5,12 @@ describe Econfig::Shortcut do
   describe "#method_missing" do
     it "proxies getters to the Econfig instance" do
       Econfig.instance.should_receive(:get).with("foobar").and_return("elephant")
-      mod.foobar.should == "elephant"
+      mod.config.foobar.should == "elephant"
     end
 
     it "proxies bang methods to the Econfig instance" do
       Econfig.instance.should_receive(:get!).with("foobar").and_return("elephant")
-      mod.foobar!.should == "elephant"
+      mod.config.foobar!.should == "elephant"
     end
   end
 end
