@@ -14,7 +14,7 @@ describe Econfig::Redis do
     end
 
     it "fetches a previously persisted option" do
-      redis.set("econfig_foo", "bar")
+      redis.set("foo", "bar")
       backend.get("foo").should == "bar"
     end
 
@@ -26,7 +26,7 @@ describe Econfig::Redis do
   describe "#set" do
     it "persists keys to database" do
       backend.set("foo", "bar")
-      redis.get("econfig_foo").should == "bar"
+      redis.get("foo").should == "bar"
     end
   end
 end
