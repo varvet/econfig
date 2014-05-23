@@ -3,7 +3,10 @@ describe Econfig::Configuration do
   let(:other_backend) { double }
   let(:config) { Econfig::Configuration.new }
 
-  before { config.backends.push(backend, other_backend) }
+  before do
+    config.backends.add(:other, other_backend)
+    config.backends.add(:one, backend)
+  end
 
   describe "#[]" do
     it "returns response from first backend" do

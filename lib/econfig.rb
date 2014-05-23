@@ -4,6 +4,7 @@ require "econfig/yaml"
 require "econfig/env"
 require "econfig/configuration"
 require "econfig/shortcut"
+require "econfig/backend_collection"
 
 module Econfig
   class NotFound < StandardError; end
@@ -23,7 +24,7 @@ module Econfig
     end
 
     def init
-      Econfig.instance.backends.each do |backend|
+      Econfig.instance.backends.list.each do |backend|
         backend.init if backend.respond_to?(:init)
       end
     end
@@ -31,5 +32,5 @@ module Econfig
 end
 
 Econfig.instance = Econfig::Configuration.new
-Econfig.instance.backends << Econfig::ENV.new
-Econfig.instance.backends << Econfig::YAML.new
+Econfig.instance.backends.add :yaml, Econfig::YAML.new
+Econfig.instance.backends.add :env, Econfig::ENV.new
