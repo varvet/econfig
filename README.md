@@ -34,20 +34,19 @@ end
 In `config/application.rb`. This will give you:
 
 ``` ruby
-MyApp.aws_access_key_id
+MyApp.config.aws_access_key_id
 ```
 
 which is obviously way more convenient. The rest of this README is going to
 assume that you added this shortcut.
 
-## Forcing an option to exist
+## Accessing optional configuration
 
-Sometimes you want the application to crash early when a given config option is
-not set. Just add a bang (!) after the option name, and an error will be thrown
-if it is not set to a value which is present.
+If the key you accessed is not configured, econfig will raise an error. To
+access optional configuration, which can be nil, use brackets:
 
 ``` ruby
-MyApp.aws_access_key_id!
+MyApp.config[:aws_access_key_id]
 ```
 
 ## Configuring options.
@@ -66,7 +65,8 @@ them easily. The options are listed in descending order of preference.
 
 ### ENV variables
 
-Just set an environment variable whose name is the name of the option being accessed uppercased.
+Just set an environment variable whose name is the name of the option being
+accessed uppercased.
 
 For example:
 
