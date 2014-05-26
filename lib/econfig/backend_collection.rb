@@ -19,7 +19,13 @@ module Econfig
       end
     end
 
-    def add(name, backend)
+    def push(name, backend)
+      exists‽(name)
+      @backends.push([name, backend])
+    end
+    alias_method :use, :push
+
+    def unshift(name, backend)
       exists‽(name)
       @backends.unshift([name, backend])
     end

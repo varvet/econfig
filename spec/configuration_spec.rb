@@ -4,8 +4,8 @@ describe Econfig::Configuration do
   let(:config) { Econfig::Configuration.new }
 
   before do
-    config.backends.add(:other, other_backend)
-    config.backends.add(:one, backend)
+    config.backends.push(:one, backend)
+    config.backends.push(:other, other_backend)
   end
 
   describe "#[]" do

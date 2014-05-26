@@ -32,5 +32,7 @@ module Econfig
 end
 
 Econfig.instance = Econfig::Configuration.new
-Econfig.instance.backends.add :yaml, Econfig::YAML.new
-Econfig.instance.backends.add :env, Econfig::ENV.new
+Econfig.instance.backends.use :memory, Econfig::YAML.new
+Econfig.instance.backends.use :env, Econfig::ENV.new
+Econfig.instance.backends.use :yaml, Econfig::YAML.new
+Econfig.instance.default_write_backend = :memory
