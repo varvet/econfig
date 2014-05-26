@@ -11,9 +11,11 @@ module Econfig
     end
 
     def [](key)
-      key = key.to_s
-      backend = backends.find { |backend| backend.get(key) }
-      backend.get(key) if backend
+      backends.each do |backend|
+        value = backend.get(key.to_s)
+        return value if value
+      end
+      nil
     end
 
     def []=(backend_name = default_write_backend, key, value)
