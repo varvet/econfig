@@ -70,6 +70,12 @@ For example:
 AWS_ACCESS_KEY_ID=xyz rails server
 ```
 
+You can now read it like this:
+
+``` ruby
+MyApp.config.aws_access_key_id # => "xyz"
+```
+
 This is especially convenient for Heroku.
 
 ### YAML
