@@ -129,6 +129,8 @@ redis = Redis.new(:host => "myredis.com")
 Econfig.backends.insert_after :env, :redis, Econfig::Redis.new(redis)
 ```
 
+If you wish to namespace your keys in Redis, you can use [redis namespace](http://rubygems.org/gems/redis-namespace).
+
 ### OSX Keychain
 
 For the OSX keychain backend, see [econfig-keychain](https://github.com/elabs/econfig-keychain).
