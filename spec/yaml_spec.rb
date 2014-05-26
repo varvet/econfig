@@ -1,5 +1,5 @@
 describe Econfig::YAML do
-  let(:backend) { Econfig::YAML.new.tap(&:init) }
+  let(:backend) { Econfig::YAML.new("config/app.yml").tap(&:init) }
   describe "#get" do
     it "fetches option from yaml config file" do
       backend.get("quox").should == "baz"

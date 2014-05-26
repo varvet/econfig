@@ -1,3 +1,4 @@
+require "forwardable"
 require "econfig/version"
 require "econfig/memory"
 require "econfig/yaml"
@@ -11,20 +12,14 @@ module Econfig
   class UninitializedError < StandardError; end
 
   class << self
+    extend Forwardable
+
     attr_accessor :root, :env, :instance
 
-    def use_database
-      require "econfig/active_record"
-      Econfig.instance.backends << Econfig::ActiveRecord.new
-    end
-
-    def use_redis(redis)
-      require "econfig/redis"
-      Econfig.instance.backends << Econfig::Redis.new(redis)
-    end
+    def_delegators :instance, :backends, :default_write_backend, :default_write_backend=
 
     def init
-      Econfig.instance.backends.each do |backend|
+      backends.each do |backend|
         backend.init if backend.respond_to?(:init)
       end
     end
@@ -32,7 +27,9 @@ module Econfig
 end
 
 Econfig.instance = Econfig::Configuration.new
-Econfig.instance.backends.use :memory, Econfig::YAML.new
-Econfig.instance.backends.use :env, Econfig::ENV.new
-Econfig.instance.backends.use :yaml, Econfig::YAML.new
-Econfig.instance.default_write_backend = :memory
+
+Econfig.default_write_backend = :memory
+Econfig.backends.use :memory, Econfig::Memory.new
+Econfig.backends.use :env, Econfig::ENV.new
+Econfig.backends.use :secret, Econfig::YAML.new("config/secret.yml")
+Econfig.backends.use :yaml, Econfig::YAML.new("config/app.yml")

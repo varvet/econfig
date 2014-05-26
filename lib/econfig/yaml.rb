@@ -1,6 +1,6 @@
 module Econfig
   class YAML
-    def initialize(path="config/app.yml")
+    def initialize(path)
       @path = path
     end
 
