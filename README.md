@@ -38,8 +38,6 @@ Now you can access configuration like this:
 MyApp.config.aws_access_key_id
 ```
 
-## Accessing optional configuration
-
 If the key you accessed is not configured, Econfig will raise an error. To
 access optional configuration, which can be nil, use brackets:
 
