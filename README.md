@@ -1,48 +1,46 @@
 # Econfig
 
-Econfig is a gem which allows you to easily configure your Rails applications
+Econfig is a gem which allows you to easily configure your Ruby applications
 in a multitude of ways.
 
 ## Installation
 
-Add this to your gemfile:
+Add this to your Gemfile:
 
 ``` ruby
-gem "econfig", :require => "econfig/rails"
+gem "econfig"
+```
+
+If you're using Rails, you'll want to require the Rails extension:
+
+``` ruby
+gem "econfig", require: "econfig/rails"
 ```
 
 ## Accessing config options
 
-Econfig extends the Rails configuration, you can use it like this:
-
-``` ruby
-MyApp::Application.config.app.aws_access_key
-```
-
-Where `MyApp` is the name of your application and `aws_access_key` is whatever
-property you want to access. We recommend you add the shortcut module so you
-can access config options directly:
+Extend your main application module with the Econfig shortcut. In Rails, you'll
+want to add this in `config/application.rb`:
 
 ``` ruby
 module MyApp
   extend Econfig::Shortcut
 
-  …
+  class Application < Rails::Application
+    …
+  end
 end
 ```
 
-In `config/application.rb`. This will give you:
+Now you can access configuration like this:
 
 ``` ruby
 MyApp.config.aws_access_key_id
 ```
 
-which is obviously way more convenient. The rest of this README is going to
-assume that you added this shortcut.
-
 ## Accessing optional configuration
 
-If the key you accessed is not configured, econfig will raise an error. To
+If the key you accessed is not configured, Econfig will raise an error. To
 access optional configuration, which can be nil, use brackets:
 
 ``` ruby
@@ -59,7 +57,7 @@ You can specify configuration through:
 4. YAML files
 5. OSX Keychain
 
-This allows you to set up econfig on most kinds of hosting solutions
+This allows you to set up Econfig on most kinds of hosting solutions
 (EngineYard, Heroku, etc) without any additional effort, and to switch between
 them easily. The options are listed in descending order of preference.
 
@@ -76,45 +74,6 @@ AWS_ACCESS_KEY_ID=xyz rails server
 
 This is especially convenient for Heroku.
 
-### Relational database
-
-This needs to be explicitly enabled. In `config/application.rb` add this line:
-
-``` ruby
-Econfig.use_database
-```
-
-You will also need to create a migration to create the necessary database tables:
-
-``` sh
-rails generate econfig:migration
-rake db:migrate
-```
-
-You can now set options by assigning them:
-
-``` ruby
-MyApp.aws_access_key_id = "xyz"
-```
-
-You may not use both Redis and relational database storage at the same time.
-
-### Redis
-
-This needs to be explicitly enabled. In `config/application.rb` add this line:
-
-``` ruby
-Econfig.use_redis Redis.new(:host => "myredis.com")
-```
-
-You can now set options by assigning them:
-
-``` ruby
-MyApp.aws_access_key_id = "xyz"
-```
-
-You may not use both Redis and relational database storage at the same time.
-
 ### YAML
 
 Add a yaml file to `config/app.yml`. This should have a similar layout to `config/database.yml`:
@@ -128,9 +87,72 @@ production:
   aws_secret_access_key: "xyz"
 ```
 
+Econfig also reads configuration from `config/secret.yml` which is the new
+standard for secret configuration parameters in Rails 4.1.
+
+### Relational database
+
+This needs to be explicitly enabled. In `config/application.rb` add this code:
+
+``` ruby
+require "econfig/active_record"
+Econfig.backends.insert_after :env, :db, Econfig::ActiveRecord.new
+```
+
+You probably want environment variables to take precendence over configuration
+from ActiveRecord, hence the `insert_after`. If you'd rather have ActiveRecord
+configuration take precendence you can use this instead:
+
+``` ruby
+require "econfig/active_record"
+Econfig.backends.unshift :db, Econfig::ActiveRecord.new
+```
+
+You will also need to create a migration to create the necessary database tables:
+
+``` sh
+rails generate econfig:migration
+rake db:migrate
+```
+
+### Redis
+
+This needs to be explicitly enabled. In `config/application.rb` add this code:
+
+``` ruby
+require "econfig/redis"
+redis = Redis.new(:host => "myredis.com")
+Econfig.backends.insert_after :env, :redis, Econfig::Redis.new(redis)
+```
+
 ### OSX Keychain
 
 For the OSX keychain backend, see [econfig-keychain](https://github.com/elabs/econfig-keychain).
+
+## Setting values
+
+You can set options by simply assigning them:
+
+``` ruby
+MyApp.config[:aws_access_key_id] = "xyz"
+```
+
+This will set the value in the default write backend, which by default is
+`:memory`. This means that by default, configuration which is set like this is
+not persisted in any way.
+
+If you always want to assign values to a different backend, for example the
+database backend, you can set the default write backend like this:
+
+``` ruby
+Econfig.default_write_backend = :db
+```
+
+You can also explicitly supply the backend when setting a configuration value:
+
+``` ruby
+MyApp.config[:db, :aws_access_key_id] = "xyz"
+```
 
 ## License
 
