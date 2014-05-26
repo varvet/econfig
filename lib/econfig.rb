@@ -24,7 +24,7 @@ module Econfig
     end
 
     def init
-      Econfig.instance.backends.list.each do |backend|
+      Econfig.instance.backends.each do |backend|
         backend.init if backend.respond_to?(:init)
       end
     end

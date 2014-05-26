@@ -5,7 +5,7 @@ module Econfig
     end
 
     def set(key, value)
-      backend = backends.list.find { |backend| backend.respond_to?(:set) }
+      backend = backends.find { |backend| backend.respond_to?(:set) }
       backend.set(key, value) if backend
     end
 
@@ -15,7 +15,7 @@ module Econfig
 
     def [](key)
       key = key.to_s
-      backend = backends.list.find { |backend| backend.get(key) }
+      backend = backends.find { |backend| backend.get(key) }
       backend.get(key) if backend
     end
 
