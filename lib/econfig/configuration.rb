@@ -1,12 +1,9 @@
 module Econfig
   class Configuration
+    attr_accessor :default_write_backend
+
     def backends
       @backends ||= BackendCollection.new
-    end
-
-    def set(key, value)
-      backend = backends.find { |backend| backend.respond_to?(:set) }
-      backend.set(key, value) if backend
     end
 
     def fetch(key)
@@ -17,6 +14,15 @@ module Econfig
       key = key.to_s
       backend = backends.find { |backend| backend.get(key) }
       backend.get(key) if backend
+    end
+
+    def []=(backend_name = default_write_backend, key, value)
+      raise ArgumentError, "no backend given" unless backend_name
+      if backend = backends[backend_name]
+        backend.set(key, value)
+      else
+        raise KeyError, "#{backend_name} is not set"
+      end
     end
 
     def method_missing(name, *args)

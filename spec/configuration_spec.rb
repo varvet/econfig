@@ -27,6 +27,28 @@ describe Econfig::Configuration do
     end
   end
 
+  describe "#[]=" do
+    it "sets response on given backend" do
+      backend.should_receive(:set).with("foobar", "elephant")
+      config[:one, "foobar"] = "elephant"
+    end
+
+    it "sets response on default backend if default backend is set" do
+      config.default_write_backend = :other
+      other_backend.should_receive(:set).with("foobar", "elephant")
+      config["foobar"] = "elephant"
+    end
+
+    it "raises an error if no backend given and no default backend is set" do
+      config.default_write_backend = nil
+      expect { config["foobar"] = "elephant" }.to raise_error(ArgumentError, "no backend given")
+    end
+
+    it "raises an error if the backend does not exist" do
+      expect { config[:does_not_exist, "foobar"] = "elephant" }.to raise_error(KeyError, "does_not_exist is not set")
+    end
+  end
+
   describe "#fetch" do
     it "returns response from first backend" do
       backend.stub(:get).with("foobar").and_return("elephant")
@@ -43,22 +65,6 @@ describe Econfig::Configuration do
       backend.stub(:get).with("foobar").and_return(nil)
       other_backend.stub(:get).with("foobar").and_return(nil)
       expect { config.fetch("foobar") }.to raise_error(Econfig::NotFound)
-    end
-  end
-
-  describe "#set" do
-    it "sets response on first backend" do
-      backend.should_receive(:set).with("foobar", "elephant")
-      config.set("foobar", "elephant")
-    end
-
-    it "skips backends which don't have a set method" do
-      other_backend.should_receive(:set).with("foobar", "elephant")
-      config.set("foobar", "elephant")
-    end
-
-    it "does nothing when no backend has a setter method" do
-      config.set("foobar", "elephant")
     end
   end
 
