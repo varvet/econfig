@@ -57,7 +57,7 @@ You can specify configuration through:
 
 This allows you to set up Econfig on most kinds of hosting solutions
 (EngineYard, Heroku, etc) without any additional effort, and to switch between
-them easily. The options are listed in descending order of preference.
+them easily.
 
 ### ENV variables
 
