@@ -14,6 +14,11 @@ describe Econfig::Configuration do
       config["foobar"].should == "elephant"
     end
 
+    it "casts key to string" do
+      backend.stub(:get).with("foobar").and_return("elephant")
+      config[:foobar].should == "elephant"
+    end
+
     it "tries multiple backends until it finds a response" do
       backend.stub(:get).with("foobar").and_return(nil)
       other_backend.stub(:get).with("foobar").and_return("elephant")
@@ -31,6 +36,11 @@ describe Econfig::Configuration do
     it "sets response on given backend" do
       backend.should_receive(:set).with("foobar", "elephant")
       config[:one, "foobar"] = "elephant"
+    end
+
+    it "casts keys to string" do
+      backend.should_receive(:set).with("foobar", "elephant")
+      config[:one, :foobar] = "elephant"
     end
 
     it "sets response on default backend if default backend is set" do

@@ -21,7 +21,7 @@ module Econfig
     def []=(backend_name = default_write_backend, key, value)
       raise ArgumentError, "no backend given" unless backend_name
       if backend = backends[backend_name]
-        backend.set(key, value)
+        backend.set(key.to_s, value)
       else
         raise KeyError, "#{backend_name} is not set"
       end
