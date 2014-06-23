@@ -31,5 +31,5 @@ Econfig.instance = Econfig::Configuration.new
 Econfig.default_write_backend = :memory
 Econfig.backends.use :memory, Econfig::Memory.new
 Econfig.backends.use :env, Econfig::ENV.new
-Econfig.backends.use :secret, Econfig::YAML.new("config/secret.yml")
+Econfig.backends.use :secrets, Econfig::YAML.new("config/secrets.yml")
 Econfig.backends.use :yaml, Econfig::YAML.new("config/app.yml")
