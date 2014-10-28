@@ -45,6 +45,11 @@ access optional configuration, which can be nil, use brackets:
 MyApp.config[:aws_access_key_id]
 ```
 
+Sometimes you might want to bypass the strictness requirement in econfig, for
+example if you're running the application as part of a build process.  In that
+case you can set the environment variable `ECONFIG_PERMISSIVE`, and econfig
+will not raise errors on missing keys, instead returning `nil`.
+
 ## Configuring options.
 
 You can specify configuration through:

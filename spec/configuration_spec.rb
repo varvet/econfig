@@ -79,9 +79,26 @@ describe Econfig::Configuration do
   end
 
   describe "#method_missing" do
+    after do
+      ENV["ECONFIG_PERMISSIVE"] = nil
+    end
+
     it "calls fetch for normal methods" do
       backend.stub(:get).with("foobar").and_return("elephant")
       config.foobar.should == "elephant"
+    end
+
+    it "raises error if the key can't be found in any backend" do
+      backend.stub(:get).with("foobar").and_return(nil)
+      other_backend.stub(:get).with("foobar").and_return(nil)
+      expect { config.foobar }.to raise_error(Econfig::NotFound)
+    end
+
+    it "returns nil if environment variable bypass is set" do
+      ENV["ECONFIG_PERMISSIVE"] = "true"
+      backend.stub(:get).with("foobar").and_return(nil)
+      other_backend.stub(:get).with("foobar").and_return(nil)
+      config.foobar.should be_nil
     end
 
     it "raises NoMethodError for bang methods" do
