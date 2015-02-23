@@ -8,6 +8,10 @@ module Econfig
       options[key]
     end
 
+    def has_key?(key)
+      options.has_key?(key)
+    end
+
     def init
       require "yaml"
       require "erb"

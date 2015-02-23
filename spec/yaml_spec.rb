@@ -1,5 +1,21 @@
 describe Econfig::YAML do
   let(:backend) { Econfig::YAML.new("config/app.yml").tap(&:init) }
+
+  describe "#has_key?" do
+    it "returns true if option exists" do
+      expect(backend.has_key?("quox")).to eq(true)
+    end
+
+    it "returns false when the key does not exist" do
+      expect(backend.has_key?("does_not_exist")).to eq(false)
+    end
+
+    it "returns false when there is no config file" do
+      backend = Econfig::YAML.new("/does/not/exist").tap(&:init)
+      expect(backend.has_key?("does_not_exist")).to eq(false)
+    end
+  end
+
   describe "#get" do
     it "fetches option from yaml config file" do
       backend.get("quox").should == "baz"

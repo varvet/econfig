@@ -10,24 +10,27 @@ describe Econfig::Configuration do
 
   describe "#[]" do
     it "returns response from first backend" do
+      backend.stub(:has_key?).with("foobar").and_return(true)
       backend.stub(:get).with("foobar").and_return("elephant")
       config["foobar"].should == "elephant"
     end
 
     it "casts key to string" do
+      backend.stub(:has_key?).with("foobar").and_return(true)
       backend.stub(:get).with("foobar").and_return("elephant")
       config[:foobar].should == "elephant"
     end
 
     it "tries multiple backends until it finds a response" do
-      backend.stub(:get).with("foobar").and_return(nil)
+      backend.stub(:has_key?).with("foobar").and_return(false)
+      other_backend.stub(:has_key?).with("foobar").and_return(true)
       other_backend.stub(:get).with("foobar").and_return("elephant")
       config["foobar"].should == "elephant"
     end
 
     it "returns nil if the key can't be found in any backend" do
-      backend.stub(:get).with("foobar").and_return(nil)
-      other_backend.stub(:get).with("foobar").and_return(nil)
+      backend.stub(:has_key?).with("foobar").and_return(false)
+      other_backend.stub(:has_key?).with("foobar").and_return(false)
       config["foobar"].should == nil
     end
   end
@@ -61,19 +64,21 @@ describe Econfig::Configuration do
 
   describe "#fetch" do
     it "returns response from first backend" do
+      backend.stub(:has_key?).with("foobar").and_return(true)
       backend.stub(:get).with("foobar").and_return("elephant")
       config.fetch("foobar").should == "elephant"
     end
 
     it "tries multiple backends until it finds a response" do
-      backend.stub(:get).with("foobar").and_return(nil)
+      backend.stub(:has_key?).with("foobar").and_return(false)
+      other_backend.stub(:has_key?).with("foobar").and_return(true)
       other_backend.stub(:get).with("foobar").and_return("elephant")
       config.fetch("foobar").should == "elephant"
     end
 
     it "raises error if the key can't be found in any backend" do
-      backend.stub(:get).with("foobar").and_return(nil)
-      other_backend.stub(:get).with("foobar").and_return(nil)
+      backend.stub(:has_key?).with("foobar").and_return(false)
+      other_backend.stub(:has_key?).with("foobar").and_return(false)
       expect { config.fetch("foobar") }.to raise_error(Econfig::NotFound)
     end
   end
@@ -84,20 +89,21 @@ describe Econfig::Configuration do
     end
 
     it "calls fetch for normal methods" do
+      backend.stub(:has_key?).with("foobar").and_return(true)
       backend.stub(:get).with("foobar").and_return("elephant")
       config.foobar.should == "elephant"
     end
 
     it "raises error if the key can't be found in any backend" do
-      backend.stub(:get).with("foobar").and_return(nil)
-      other_backend.stub(:get).with("foobar").and_return(nil)
+      backend.stub(:has_key?).with("foobar").and_return(false)
+      other_backend.stub(:has_key?).with("foobar").and_return(false)
       expect { config.foobar }.to raise_error(Econfig::NotFound)
     end
 
     it "returns nil if environment variable bypass is set" do
       ENV["ECONFIG_PERMISSIVE"] = "true"
-      backend.stub(:get).with("foobar").and_return(nil)
-      other_backend.stub(:get).with("foobar").and_return(nil)
+      backend.stub(:has_key?).with("foobar").and_return(false)
+      other_backend.stub(:has_key?).with("foobar").and_return(false)
       config.foobar.should be_nil
     end
 

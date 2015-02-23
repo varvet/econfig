@@ -12,8 +12,10 @@ module Econfig
 
     def [](key)
       backends.each do |backend|
-        value = backend.get(key.to_s)
-        return value if value
+        key = key.to_s
+        if backend.has_key?(key)
+          return backend.get(key)
+        end
       end
       nil
     end
