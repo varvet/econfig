@@ -29,7 +29,7 @@ module Econfig
 
       @mutex.synchronize do
         @options ||= if File.exist?(path)
-          ::YAML.load(::ERB.new(File.read(path)).result)[Econfig.env]
+          ::YAML.load(::ERB.new(File.read(path)).result)[Econfig.env] || {}
         else
           {}
         end
