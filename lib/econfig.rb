@@ -17,12 +17,6 @@ module Econfig
     attr_accessor :root, :env, :instance
 
     def_delegators :instance, :backends, :default_write_backend, :default_write_backend=
-
-    def init
-      backends.each do |backend|
-        backend.init if backend.respond_to?(:init)
-      end
-    end
   end
 end
 

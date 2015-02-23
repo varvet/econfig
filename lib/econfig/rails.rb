@@ -7,8 +7,6 @@ module Econfig
       Econfig.root = Rails.root
       Econfig.env = Rails.env
       Rails.application.config.app = Econfig.instance
-
-      Econfig.init
     end
   end
 end
