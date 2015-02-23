@@ -7,17 +7,19 @@ module Econfig
     end
 
     def fetch(key)
-      self[key] or raise Econfig::NotFound, "configuration key '#{key}' is not set"
+      key = key.to_s
+      backend = backends.backend_for(key)
+      if backend
+        backend.get(key)
+      else
+        raise Econfig::NotFound, "configuration key '#{key}' is not set"
+      end
     end
 
     def [](key)
-      backends.each do |backend|
-        key = key.to_s
-        if backend.has_key?(key)
-          return backend.get(key)
-        end
-      end
-      nil
+      key = key.to_s
+      backend = backends.backend_for(key)
+      backend.get(key) if backend
     end
 
     def []=(backend_name = default_write_backend, key, value)

@@ -81,6 +81,13 @@ describe Econfig::Configuration do
       other_backend.stub(:has_key?).with("foobar").and_return(false)
       expect { config.fetch("foobar") }.to raise_error(Econfig::NotFound)
     end
+
+    it "allows falsy responses" do
+      backend.stub(:has_key?).with("foobar").and_return(false)
+      other_backend.stub(:has_key?).with("foobar").and_return(true)
+      other_backend.stub(:get).with("foobar").and_return(false)
+      config.fetch("foobar").should == false
+    end
   end
 
   describe "#method_missing" do
@@ -105,6 +112,13 @@ describe Econfig::Configuration do
       backend.stub(:has_key?).with("foobar").and_return(false)
       other_backend.stub(:has_key?).with("foobar").and_return(false)
       config.foobar.should be_nil
+    end
+
+    it "allows falsy responses" do
+      backend.stub(:has_key?).with("foobar").and_return(false)
+      other_backend.stub(:has_key?).with("foobar").and_return(true)
+      other_backend.stub(:get).with("foobar").and_return(false)
+      config.foobar.should == false
     end
 
     it "raises NoMethodError for bang methods" do

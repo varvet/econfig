@@ -44,6 +44,11 @@ module Econfig
       @backends.delete_at(index_of!(name))
     end
 
+    def backend_for(key)
+      result = @backends.find { |(n, b)| b.has_key?(key) }
+      result[1] if result
+    end
+
   private
 
     def exists‽(name)
