@@ -22,5 +22,11 @@ module Econfig
         @options[key] = value
       end
     end
+
+    def clear
+      @mutex.synchronize do
+        @options.clear
+      end
+    end
   end
 end

@@ -26,4 +26,12 @@ describe Econfig::Memory do
       backend.get("foo").should == "bar"
     end
   end
+
+  describe "#clear" do
+    it "clears all set keys" do
+      backend.set("foo", "bar")
+      backend.clear
+      backend.has_key?("foo").should be_falsy
+    end
+  end
 end
