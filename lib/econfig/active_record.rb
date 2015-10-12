@@ -7,6 +7,10 @@ module Econfig
       validates_presence_of :key
     end
 
+    def keys
+      Set.new(Option.pluck(:key))
+    end
+
     def get(key)
       if option = Option.find_by_key(key)
         option.value

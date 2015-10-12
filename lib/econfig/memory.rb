@@ -5,6 +5,10 @@ module Econfig
       @options = {}
     end
 
+    def keys
+      Set.new(@options.keys)
+    end
+
     def has_key?(key)
       @options.has_key?(key)
     end

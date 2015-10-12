@@ -8,6 +8,14 @@ describe Econfig::Redis do
     redis.flushdb
   end
 
+  describe "#keys" do
+    it "returns a list of set keys" do
+      backend.set("foo", "123")
+      backend.set("bar", "664")
+      backend.keys.should eq(Set.new(["foo", "bar"]))
+    end
+  end
+
   describe "#has_key?" do
     it "returns true if key exists" do
       backend.set("foo", "bar")

@@ -1,6 +1,12 @@
 describe Econfig::YAML do
   let(:backend) { Econfig::YAML.new("config/app.yml") }
 
+  describe "#keys" do
+    it "returns keys set in backend" do
+      expect(backend.keys).to eq(Set.new(["quox", "envir"]))
+    end
+  end
+
   describe "#has_key?" do
     it "returns true if option exists" do
       expect(backend.has_key?("quox")).to eq(true)

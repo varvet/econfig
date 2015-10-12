@@ -5,6 +5,12 @@ describe Econfig::ENV do
     ENV["FOO_BAR"] = "monkey"
   end
 
+  describe "#keys" do
+    it "is not supported because it would return a lot of junk" do
+      backend.respond_to?(:keys).should be_falsy
+    end
+  end
+
   describe "#has_key?" do
     it "returns true if key exists" do
       backend.has_key?("foo_bar").should eq(true)

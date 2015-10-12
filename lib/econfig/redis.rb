@@ -4,6 +4,10 @@ module Econfig
       @redis = redis
     end
 
+    def keys
+      Set.new(@redis.keys)
+    end
+
     def has_key?(key)
       @redis.exists(key)
     end

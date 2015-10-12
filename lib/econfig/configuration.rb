@@ -7,6 +7,7 @@ module Econfig
     end
 
     def keys
+      backends.keys
     end
 
     def fetch(key)

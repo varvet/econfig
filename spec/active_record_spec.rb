@@ -18,6 +18,14 @@ describe Econfig::ActiveRecord do
     end
   end
 
+  describe "#keys" do
+    it "returns a list of set keys" do
+      backend.set("foo", "123")
+      backend.set("bar", "664")
+      backend.keys.should eq(Set.new(["foo", "bar"]))
+    end
+  end
+
   describe "#get" do
     it "fetches a previously set option" do
       backend.set("foo", "bar")

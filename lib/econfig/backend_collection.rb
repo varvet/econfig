@@ -7,6 +7,16 @@ module Econfig
       @backends = []
     end
 
+    def keys
+      @backends.reduce(Set.new) do |agg, (name, backend)|
+        if backend.respond_to?(:keys)
+          agg.union(backend.keys)
+        else
+          agg
+        end
+      end
+    end
+
     def [](name)
       pair = @backends.assoc(name)
       pair.last if pair

@@ -9,6 +9,10 @@ module Econfig
       @options = nil
     end
 
+    def keys
+      Set.new(options.keys)
+    end
+
     def get(key)
       options[key]
     end

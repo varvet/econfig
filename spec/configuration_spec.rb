@@ -8,6 +8,19 @@ describe Econfig::Configuration do
     config.backends.push(:other, other_backend)
   end
 
+  describe "#keys" do
+    it "returns the union of all keys" do
+      backend.stub(:keys).and_return(Set.new(["foo", "bar", "baz"]))
+      other_backend.stub(:keys).and_return(Set.new(["bar", "monkey"]))
+      config.keys.should == Set.new(["foo", "bar", "baz", "monkey"])
+    end
+
+    it "skips over backends which don't return keys" do
+      other_backend.stub(:keys).and_return(Set.new(["bar", "monkey"]))
+      config.keys.should == Set.new(["bar", "monkey"])
+    end
+  end
+
   describe "#[]" do
     it "returns response from first backend" do
       backend.stub(:has_key?).with("foobar").and_return(true)
