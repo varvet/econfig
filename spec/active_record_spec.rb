@@ -18,22 +18,6 @@ describe Econfig::ActiveRecord do
     end
   end
 
-  describe "#has_key?" do
-    it "returns true if key is set" do
-      backend.set("foo", "bar")
-      backend.has_key?("foo").should be_truthy
-    end
-
-    it "returns true if key is set to nil" do
-      backend.set("foo", nil)
-      backend.has_key?("foo").should be_truthy
-    end
-
-    it "returns false if option is not set" do
-      backend.has_key?("foo").should be_falsy
-    end
-  end
-
   describe "#get" do
     it "fetches a previously set option" do
       backend.set("foo", "bar")
@@ -47,6 +31,15 @@ describe Econfig::ActiveRecord do
 
     it "returns nil if option is not set" do
       backend.get("foo").should be_nil
+    end
+
+    it "yields if option is not set" do
+      backend.get("foo") { "blah" }.should eq("blah")
+    end
+
+    it "ignores block if set" do
+      backend.set("foo", "bar")
+      backend.get("foo") { raise "blah" }.should eq("bar")
     end
   end
 

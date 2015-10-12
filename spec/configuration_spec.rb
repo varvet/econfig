@@ -1,6 +1,6 @@
 describe Econfig::Configuration do
-  let(:backend) { double }
-  let(:other_backend) { double }
+  let(:backend) { double("backend") }
+  let(:other_backend) { double("other backend") }
   let(:config) { Econfig::Configuration.new }
 
   before do
@@ -24,6 +24,12 @@ describe Econfig::Configuration do
     it "tries multiple backends until it finds a response" do
       backend.stub(:has_key?).with("foobar").and_return(false)
       other_backend.stub(:has_key?).with("foobar").and_return(true)
+      other_backend.stub(:get).with("foobar").and_return("elephant")
+      config["foobar"].should == "elephant"
+    end
+
+    it "tries multiple backends which yield from get until it finds one which doesn't" do
+      backend.stub(:get).with("foobar").and_yield
       other_backend.stub(:get).with("foobar").and_return("elephant")
       config["foobar"].should == "elephant"
     end

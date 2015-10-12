@@ -45,9 +45,22 @@ module Econfig
       @backends.delete_at(index_of!(name))
     end
 
-    def backend_for(key)
-      result = @backends.find { |(n, b)| b.has_key?(key) }
-      result[1] if result
+    def get(key)
+      @backends.each do |(name, backend)|
+        has_key = true
+
+        if backend.respond_to?(:has_key?)
+          has_key = backend.has_key?(key)
+          value = backend.get(key) if has_key
+        else
+          value = backend.get(key) { has_key = false }
+        end
+
+        has_key or next
+        return value
+      end
+
+      yield if block_given?
     end
 
   private
