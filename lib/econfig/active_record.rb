@@ -7,6 +7,10 @@ module Econfig
       validates_presence_of :key
     end
 
+    def has_key?(key)
+      Option.where(key: key).exists?
+    end
+
     def get(key)
       Option.find_by_key(key).try(:value)
     end
