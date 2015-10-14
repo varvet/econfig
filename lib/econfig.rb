@@ -16,7 +16,7 @@ module Econfig
 
     attr_accessor :root, :env, :instance
 
-    def_delegators :instance, :backends, :default_write_backend, :default_write_backend=
+    def_delegators :instance, :backends, :cast, :default_write_backend, :default_write_backend=
   end
 end
 

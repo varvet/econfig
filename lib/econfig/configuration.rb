@@ -2,8 +2,15 @@ module Econfig
   class Configuration
     attr_accessor :default_write_backend
 
-    def backends
+    attr_reader :backends, :casts
+
+    def initialize
       @backends ||= BackendCollection.new
+      @casts ||= {}
+    end
+
+    def cast(key, &block)
+      casts[key.to_s] = block
     end
 
     def keys
@@ -11,17 +18,23 @@ module Econfig
     end
 
     def fetch(key)
-      backends.get(key.to_s) do
+      get(key) do
         raise Econfig::NotFound, "configuration key '#{key}' is not set"
       end
     end
 
-    def [](key)
+    def get(key)
       key = key.to_s
-      backends.get(key)
+      value = backends.get(key) do
+        yield if block_given?
+        return nil
+      end
+      value = casts[key].call(value) if casts[key]
+      value
     end
+    alias_method :[], :get
 
-    def []=(backend_name = default_write_backend, key, value)
+    def set(backend_name = default_write_backend, key, value)
       raise ArgumentError, "no backend given" unless backend_name
       if backend = backends[backend_name]
         backend.set(key.to_s, value)
@@ -29,6 +42,7 @@ module Econfig
         raise KeyError, "#{backend_name} is not set"
       end
     end
+    alias_method :[]=, :set
 
     def method_missing(name, *args)
       if respond_to?(name)

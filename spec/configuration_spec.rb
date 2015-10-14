@@ -34,6 +34,19 @@ describe Econfig::Configuration do
       config[:foobar].should == "elephant"
     end
 
+    it "casts value if it exists" do
+      config.cast(:foobar) { |val| val.to_i + 10 }
+      backend.stub(:get).with("foobar").and_return("123")
+      config[:foobar].should == 133
+    end
+
+    it "does not cast if there is no value" do
+      config.cast(:foobar) { |val| raise "should not be here" }
+      backend.stub(:has_key?).with("foobar").and_return(false)
+      other_backend.stub(:has_key?).with("foobar").and_return(false)
+      config[:foobar].should == nil
+    end
+
     it "tries multiple backends until it finds a response" do
       backend.stub(:has_key?).with("foobar").and_return(false)
       other_backend.stub(:has_key?).with("foobar").and_return(true)
@@ -86,6 +99,19 @@ describe Econfig::Configuration do
       backend.stub(:has_key?).with("foobar").and_return(true)
       backend.stub(:get).with("foobar").and_return("elephant")
       config.fetch("foobar").should == "elephant"
+    end
+
+    it "casts value if it exists" do
+      config.cast(:foobar) { |val| val.to_i + 10 }
+      backend.stub(:get).with("foobar").and_return("123")
+      config.fetch(:foobar).should == 133
+    end
+
+    it "does not cast if there is no value" do
+      config.cast(:foobar) { |val| raise "should not be here" }
+      backend.stub(:has_key?).with("foobar").and_return(false)
+      other_backend.stub(:has_key?).with("foobar").and_return(false)
+      expect { config.fetch("foobar") }.to raise_error(Econfig::NotFound)
     end
 
     it "tries multiple backends until it finds a response" do
