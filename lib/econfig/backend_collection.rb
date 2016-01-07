@@ -31,23 +31,23 @@ module Econfig
     end
 
     def push(name, backend)
-      exists‽(name)
+      exists?(name)
       @backends.push([name, backend])
     end
     alias_method :use, :push
 
     def unshift(name, backend)
-      exists‽(name)
+      exists?(name)
       @backends.unshift([name, backend])
     end
 
     def insert_before(other, name, backend)
-      exists‽(name)
+      exists?(name)
       @backends.insert(index_of!(other), [name, backend])
     end
 
     def insert_after(other, name, backend)
-      exists‽(name)
+      exists?(name)
       @backends.insert(index_of!(other) + 1, [name, backend])
     end
 
@@ -75,7 +75,7 @@ module Econfig
 
   private
 
-    def exists‽(name)
+    def exists?(name)
       raise KeyError, "#{name} is already set" if index_of(name)
     end
 
