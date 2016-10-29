@@ -19,20 +19,36 @@ gem "econfig", require: "econfig/rails"
 
 ## Accessing config options
 
-Extend your main application module with the Econfig shortcut. In Rails, you'll
-want to add this in `config/application.rb`:
+Extend your main application module with the Econfig shortcut.
+
+In Rails, you'll want to add this in `config/application.rb`:
 
 ``` ruby
 module MyApp
   extend Econfig::Shortcut
 
   class Application < Rails::Application
-    …
+    # …
   end
 end
 ```
 
-Now you can access configuration like this:
+In a modular Sinatra application, extend your controller class and copy its settings to Econfig in `app.rb`:
+``` ruby
+require 'sinatra'
+require 'econfig'
+
+class MyApp < Sinatra::Base
+  extend Econfig::Shortcut
+
+  Econfig.env = settings.environment.to_s
+  Econfig.root = settings.root
+
+  # …
+end
+```
+
+In either case, you can now you can access configuration like this:
 
 ``` ruby
 MyApp.config.aws_access_key_id
