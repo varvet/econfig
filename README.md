@@ -3,6 +3,10 @@
 Econfig is a gem which allows you to easily configure your Ruby applications
 in a multitude of ways.
 
+## This project is not actively maintained!
+
+We at Varvet are not currently using this gem and are not actively maintaining it. We will gratefully accept pull requests which fix bugs or update dependencies, but not functional changes. 
+
 ## Installation
 
 Add this to your Gemfile:
